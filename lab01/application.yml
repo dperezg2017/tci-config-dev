@@ -1,0 +1,13 @@
+
+
+
+
+logging.level:
+  root: INFO
+  com.example.lab01.repository: DEBUG
+  #org.springframework.web: INFO
+  #com.microsoft: ERROR
+
+
+server:
+  port: 8081
