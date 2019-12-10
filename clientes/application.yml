@@ -1,19 +1,24 @@
-version: '3.3'
-services:
-  lab02:
-    image: "lab02"
-    build:
-      context: .
-      dockerfile: ./src/main/docker/Dockerfile
-    ports:
-      - 8080:8080
+
+logging.level:
+  root: INFO
+  com.example.lab02.service: DEBUG
+  com.example.lab02.repository: DEBUG
+  org.springframework.jdbc.core: DEBUG
+  org.springframework.jdbc.core.StatementCreatorUtils: DEBUG
+  #org.springframework.web: INFO
+  #com.microsoft: ERROR
+
+server:
+  port: 7071
+
+lab02:
   cache:
-    image: redis:4-alpine
-    command: sh -c 'echo "requirepass password" | redis-server -'
-    ports:
-      - 6379:6379
-  cache-client:
-    image: redis:4-alpine
-    command: redis-cli -h fangorn
-    depends_on:
-      - cache
+    host: localhost
+    port: 6379
+    enableSsl: false
+    password: "{cipher}AgAojyhRdaqwGhHRcm8vD//Y81kgzwcPd8G931pmr3YkrI+EQVlzCbJe/9DGQfuGlB7H0EOL1dZSIpvaDnpyZ9f2AN8gO2Z6cpUuPbrEIPqRAV9/Xz9jzLlYp2JUV7bwDS5IBO7adZcTYjDk3Ss8dGZkhsFqdNH14izb7v41lD+SwnoyzQ2UL2QGHtudNaUDx6O+6NklYs+mF68n11X/ygws7WRkGsOywkVgQavGkg5wdLlM/c+loAOk6DCoSzSPBeZjcnOFODOCCNYSbbDgrrEzPUYU15B2W79NKrRJZTNY1rdwnjiKxT966cIowEtnTbvwP14J5MV9j5VYZmjR4lqk4hJYykq4+QWYf+AmQhuHbaZ9ehkHy49FEYE3SNLjJMZ2x6F0i81fM001Vtt2wWArca3DpTwZIx2XOt69mn1PtS2I4HLvgmh6yYhF1sTlJnrt2gGhh+8HIc0+V1OcZPpgY2UiX1I6uam4LQRbDESyxJxupGlc+jR639QcjSlioTYqiBbUgvtwhI9iEHvoHbmVgdCfVpviRIxpkMSx8+kj03BIHeF2uEFHGdMoSerQXtMOcXJYmbAlhQCg0Uw8AQm3gzAGB14fmAnxMLjbN1U8GjNltKHewY4Nw7AUtgq0lhkz5b58JAZ15+vPs+VhufG+WeUrc+VrH8K1nC2Y4phCPjBSLnlDDf5wYIkNKpvClZXUJqlLdNcFclKvxOy1DaDT"
+  event:
+    host: localhost
+    port: 5672
+    username: rabbitmq
+    password: rabbitmq
