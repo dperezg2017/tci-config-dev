@@ -21,7 +21,7 @@ lab02:
     enableSsl: false
     password: password
   event:
-    host: localhost
+    host: bus
     port: 5672
     username: rabbitmq
     password: rabbitmq
