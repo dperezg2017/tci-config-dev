@@ -7,8 +7,8 @@ credentials2:
 
 logging.level:
   root: INFO
-  com.example.lab02.service: DEBUG
-  com.example.lab02.repository: DEBUG
+  com.example.lab77777777777.service: DEBUG
+  com.example.lab77777777777.repository: DEBUG
   org.springframework.jdbc.core: DEBUG
   org.springframework.jdbc.core.StatementCreatorUtils: DEBUG
   #org.springframework.web: INFO
@@ -17,7 +17,7 @@ logging.level:
 server:
   port: 7071
 
-lab02:
+lab77777777777:
   cache:
     host: localhost
     port: 6379
