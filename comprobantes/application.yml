@@ -1,24 +1,56 @@
 
 logging.level:
   root: INFO
-  com.example.lab02.service: DEBUG
-  com.example.lab02.repository: DEBUG
+  pe.net.tci.pse.comprobante.repository: DEBUG
   org.springframework.jdbc.core: DEBUG
   org.springframework.jdbc.core.StatementCreatorUtils: DEBUG
   #org.springframework.web: INFO
   #com.microsoft: ERROR
 
 server:
-  port: 7071
+  port: 7070
 
-lab02:
-  cache:
-    host: localhost
-    port: 6379
-    enableSsl: false
-    password: "{cipher}AgAojyhRdaqwGhHRcm8vD//Y81kgzwcPd8G931pmr3YkrI+EQVlzCbJe/9DGQfuGlB7H0EOL1dZSIpvaDnpyZ9f2AN8gO2Z6cpUuPbrEIPqRAV9/Xz9jzLlYp2JUV7bwDS5IBO7adZcTYjDk3Ss8dGZkhsFqdNH14izb7v41lD+SwnoyzQ2UL2QGHtudNaUDx6O+6NklYs+mF68n11X/ygws7WRkGsOywkVgQavGkg5wdLlM/c+loAOk6DCoSzSPBeZjcnOFODOCCNYSbbDgrrEzPUYU15B2W79NKrRJZTNY1rdwnjiKxT966cIowEtnTbvwP14J5MV9j5VYZmjR4lqk4hJYykq4+QWYf+AmQhuHbaZ9ehkHy49FEYE3SNLjJMZ2x6F0i81fM001Vtt2wWArca3DpTwZIx2XOt69mn1PtS2I4HLvgmh6yYhF1sTlJnrt2gGhh+8HIc0+V1OcZPpgY2UiX1I6uam4LQRbDESyxJxupGlc+jR639QcjSlioTYqiBbUgvtwhI9iEHvoHbmVgdCfVpviRIxpkMSx8+kj03BIHeF2uEFHGdMoSerQXtMOcXJYmbAlhQCg0Uw8AQm3gzAGB14fmAnxMLjbN1U8GjNltKHewY4Nw7AUtgq0lhkz5b58JAZ15+vPs+VhufG+WeUrc+VrH8K1nC2Y4phCPjBSLnlDDf5wYIkNKpvClZXUJqlLdNcFclKvxOy1DaDT"
-  event:
-    host: localhost
-    port: 5672
-    username: rabbitmq
-    password: rabbitmq
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db01
+    username: root
+    password: password
+  flyway:
+  enabled: true
+  url: jdbc:mysql://localhost:3306/db01?allowPublicKeyRetrieval=false&useSSL=true&requireSSL=true&serverTimezone=UTC&encrypt=true&autoReconnect=true
+  user: root
+  password: password
+  locations: classpath:db/migration
+#schemas: dbo
+#flyway-schemas: flyway-schemas
+  group: false
+  cloud:
+    gcp:
+      stream:
+      bindings:
+        procesadorDeclaracionOutput:
+          destination: CLIENTE-TOPIC
+          group: DECLARACION
+        procesadorAuditoriaOutput:
+          destination: AUDITORIA-TOPIC
+          group: DECLARACION
+        procesadorDeclaracionInput:
+          destination: CLIENTE-TOPIC
+          group: DECLARACION
+        procesadorAuditoriaInput:
+          destination: AUDITORIA-TOPIC
+          group: DECLARACION    
+      project-id: fine-phenomenon-262021
+      credentials:
+        encoded-key: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAiZmluZS1waGVub21lbm9uLTI2MjAyMSIsCiAgInByaXZhdGVfa2V5X2lkIjogIjMzM2NlMWFmZWY2N2U2YjYzMGQwNDBlOWE3ODQwMDA0YTQwMWI3Y2UiLAogICJwcml2YXRlX2tleSI6ICItLS0tLUJFR0lOIFBSSVZBVEUgS0VZLS0tLS1cbk1JSUV2QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktZd2dnU2lBZ0VBQW9JQkFRRGFoT0N6VWhjdmxVR0tcbkJXdnF0bmFTNmExL3FMTXdMSmhyQmtTVkt0RHhyVHFHU1Z4enN6N0wvSS9TbFh1VmdOTytmdGsyOVM2ZjdsOElcbkFlekoveVpuVUI4aHVHdExOV3FNcnFFbDFCM3M5cm5DaWVLaHV2ZEc3OXRqV3RYVlVhSm83em00bzF6bGhPcWVcbnMraGxSc0NlVm1BSVdHVG0ydXpyVFYwTGMzQzQ4U2NpVWQxZ20vdzFwTFVIQmExaUhaMDc1WTF5STVnTk1oYzNcbmRhRzZ1Q25ESU9nQmJSMlNiTElsTHd6NzUxcDA1UEJFL3ErNGJ2SWN6c0psbFU0WnRlRnRyenlVZmczRjVkUk5cbnFpcnBCZFRDallHVll6WFpqWG9rdWxobTFLUXVUSVBJZFJBVFQ3WVIrK0hSbmM0a3YyT3lWYXRveEJDS3hMbXZcbmpzOFhqbTN0QWdNQkFBRUNnZ0VBR2FxZllQaXNzQUphUlIydmFBMS8vbkFUbUtuR1NFdUlxSk4vSlQwMjl4Z1hcbmhuUGg5OVlQTTNNS0twd3p2S0w1M0FkMnVJbVNiU2NZd3U1RTg1SDBYeEN1WTIzUHJuRUsvNVM0YVdMUmxBYURcbjJhbUw5TjZxMGtwMGpLWTc5UmNtV2loMU1XNkF5QlcxWUNnMkRRVkROU1hrbUQ1WHRiVHp2SXlrOStZYWtLSk5cbkNGVnhWYUYyNU9lcktsM0pESFVhVWphSFFmY29WakFGSWZnU211U1JRVnJ2dWFJb2d5Z3d2bzhtNEo5dm5UYkpcbjJJTk92MXpxTzlJdm4zOW9WTzdxZjhRWVU5UDNNNHNnQWZhVTBwb0pFNHlINjg3SVdkcjhMVTdsZlZWc2ZNUVNcbnEra29qR1VyOSs0N1pqbDFYc1ZkbzBqcHNIdndoN1I5elRKNzQrSndXUUtCZ1FENVlqK2NiS2FrRC9YRVBBY0VcbnQvOXZjRTFqakhFVU9rbXd2dStmWVkyWjFYTitSb0drRXRxVXdSUW92YkJwWjdCamNJTXJjMHZHSEx2SkU5UzVcbnlqYUU2ZVpuS0xzc2pBNzAvaDBOZDAwSVRvSVhWN0JDNi80eENrYjdBZkRiUWJDQlVUcEJzTno1WFIyRzN4WDhcbmpYalRpSzZxY1dwRTl4cWhwdUtqbDJSbHBRS0JnUURnVVFENnplY3RIaCt0ZlM4LzF5SkFlWlNqc3dSc2hDY25cbkpIeGhBNVZUd3dEQ1pkeXBqVC9DS1FVaXVRbDJ2TlBmSHhhWmZZYlNXWURoVFZRQXJIbHZpQXZvcTdJRWpXVElcbnhzd3ppNTNqWTU3aUxYSkxCekIwSXNFR2dRQ3cwTGpMa1hNazNjR0FWWlVGcDRBWGZRZEhjMk42Tk1OSzV4aUxcbjlheHcvcEhFcVFLQmdGUit5bWk0azNtUkFzZGJRMUdBK2lZSzJkMjV6dko0a1ZFMlVFQWpNSFFIMDFyY2pyNUZcbnVST2ZtN0gyRzFpTFRrTlM4czU5QVJaOTA4NWNUcjRvV25LTVFZbUFUbkxZZlpUYXFJTlFnYVFuM1lJRkx1NXRcbndURmlkd3hDNnhXTzJ6dmxocVNOUlVHa0lBWDdmaHFVNEhSam9qS1R2TnJqRW4zazZuTmRMeUlWQW9HQUlEdGpcbmdhWmVobndpbnlJeXpPQ1QybUhkK3R1NVVnSjNRY2ViVzdGUkhyVVJnZDF6SktYWU9JVCthT3Zmc1VFV3pLUEJcbjhwSTM4amZNTGhPWGMzVlZDYktweTJnSWIyRUZ6MWZKZGNxbENFeURRd3EydHBNMDRpc3dRMGY4R213VGNhVFhcbnY3OWhrNWc0anBSdjhuQVR3SytTNXJkNExHWWlmOUh3VWxneUIra0NnWUF4UCsvOW1QemFwVHJlak1VMmZFVk1cbmtwOTlqcjlHVzVEQjJ0WWgyUlR2ZFd0dVVVMndodE1zL3Y2cmlyUS9wYmtpYW9VbG04WDA1RlNFQjlqdkZnbElcbjJFQi9lclN2dkpKZjExZzV5VVF0aFE1ZXkzeXZqVUo3ZWp2Nzc4UjJ6ODNyUmcxVkdZS05XR1d1RmpjVWdGWVRcblJPS0h4VmxGbzNIalNpckJjM0RZaUE9PVxuLS0tLS1FTkQgUFJJVkFURSBLRVktLS0tLVxuIiwKICAiY2xpZW50X2VtYWlsIjogInNlcnZpY2lvcHJ1ZWJhc3Bzc0BmaW5lLXBoZW5vbWVub24tMjYyMDIxLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwKICAiY2xpZW50X2lkIjogIjExNDYwNzkwOTc0Nzc1Nzg2NTA2OSIsCiAgImF1dGhfdXJpIjogImh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbS9vL29hdXRoMi9hdXRoIiwKICAidG9rZW5fdXJpIjogImh0dHBzOi8vb2F1dGgyLmdvb2dsZWFwaXMuY29tL3Rva2VuIiwKICAiYXV0aF9wcm92aWRlcl94NTA5X2NlcnRfdXJsIjogImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL29hdXRoMi92MS9jZXJ0cyIsCiAgImNsaWVudF94NTA5X2NlcnRfdXJsIjogImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL3JvYm90L3YxL21ldGFkYXRhL3g1MDkvc2VydmljaW9wcnVlYmFzcHNzJTQwZmluZS1waGVub21lbm9uLTI2MjAyMS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIKfQo=
+      pubsub:
+        subscriber:
+          max-ack-extension-period: 3600
+          executor-threads: 5
+          parallel-pull-count: 5
+          retry:
+            max-rpc-timeout-seconds: 10
+            max-attempts: 100
+        publisher:
+          executor-threads: 5
